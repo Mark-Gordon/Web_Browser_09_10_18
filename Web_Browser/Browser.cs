@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
+using System.Xml;
 
 namespace Web_Browser
 {
@@ -19,15 +12,16 @@ namespace Web_Browser
         public Browser()
         {
             InitializeComponent();
-            initNewTab(null);
             populateHistory();
             populateFavourites();
+            initNewTab(null);
         }
 
         public void changeTabName(string name)
         {
             if (name.Length > 10)
                 name = name.Substring(0, 10) + "...";
+
             tabControl.SelectedTab.Text = name;
 
         }
@@ -73,24 +67,25 @@ namespace Web_Browser
 
         public void populateFavourites()
         {
+            Favourites.checkExists();
             favesMenu.DropDownItems.Clear();
 
-            // reads lines from fave file
-            string[] faveText = Favourites.getFaves();
+            XmlNodeList favouriteNodes = Favourites.getFaves();
    
 
             int index = 0;
             //loops from last index as we want to display the last entered favourite first
-            for (int i= faveText.Length-1; i >= 0; i--)
+            for (int i= favouriteNodes.Count-1; i >= 0; i--)
             {
-                //a space character indicates the beginning of the user assigned name and the end of the url (seeing a url can't contain spaces)
-                string[] result = faveText[i].Split(' ');
+                string url = favouriteNodes[i].InnerText;
 
-                favesMenu.DropDownItems.Add(result[1]);
+                Console.WriteLine(i);
+                favesMenu.DropDownItems.Add(favouriteNodes[i].Attributes["name"].Value);
                 //On tab strip item click, init tab with the url value assigned to that item
                 ToolStripItem newFaveItem = favesMenu.DropDownItems[index];
+                Console.WriteLine(favouriteNodes[0].InnerText + " -----");
                 newFaveItem.Click += (a, e) => {
-                    initNewTab(result[0]);
+                    initNewTab(url);
                 };
                 index++;
                 //keeps favourites drop down list to a count of 10
@@ -101,15 +96,18 @@ namespace Web_Browser
 
         public void populateHistory()
         {
+
+            History.checkExists();
+
             historyMenu.DropDownItems.Clear();
             // Open the file to read from.
-            string[] historyText = History.getHistory();
+            XmlNodeList historyNodes = History.getHistory();
 
 
             int index = 0;
-            for (int i = historyText.Length - 1; i >= 0; i--)
+            for (int i = historyNodes.Count - 1; i >= 0; i--)
             {
-                historyMenu.DropDownItems.Add(historyText[i]);
+                historyMenu.DropDownItems.Add(historyNodes[i].InnerText);
                 //On tab strip item click, init tab with the url value assigned to that item
                 ToolStripItem it = historyMenu.DropDownItems[index];
                 it.Click += (a, e) => {
@@ -130,7 +128,7 @@ namespace Web_Browser
         private void clearHistoryMenu_Click(object sender, EventArgs e)
         {
             historyMenu.DropDownItems.Clear();
-            History.clearHistory();
+            History.clearHistoryFile();
         }
 
         private void removeTabMenu_Click(object sender, EventArgs e)

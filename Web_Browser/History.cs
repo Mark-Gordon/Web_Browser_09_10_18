@@ -4,28 +4,58 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Web_Browser
 {
     static class History{
 
         static string path = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "\\history.txt";
+        static string historyPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "\\history.xml";
+        static XmlDocument xmlDoc = new XmlDocument();
 
         private static LinkedList<string> history = new LinkedList<string>();
         public static LinkedListNode<string> current = new LinkedListNode<string>(null);
 
 
-
-
-        public static string[] getHistory ()
+        public static void checkExists()
         {
-            string[] readText = File.ReadAllLines(path, Encoding.UTF8);
-            return readText;
+            if (!File.Exists(historyPath))
+            {
+                XmlNode rootNode = xmlDoc.CreateElement("historys");
+                xmlDoc.AppendChild(rootNode);
+
+                xmlDoc.Save(historyPath);
+
+            }
+            else
+            {
+                xmlDoc.Load(historyPath);
+            }
+
         }
 
-        public static void clearHistory()
+        public static void saveHistoryFile()
         {
-            File.Create(path).Close();
+            xmlDoc.Save(historyPath);
+
+        }
+
+
+        public static XmlNodeList getHistory()
+        {
+
+            XmlNodeList favouriteNodes = xmlDoc.SelectNodes("//historys/history");
+
+
+            return favouriteNodes;
+        }
+
+        public static void clearHistoryFile()
+        {
+
+            xmlDoc.DocumentElement.RemoveAll();
+            saveHistoryFile();
         }
 
 
@@ -58,9 +88,18 @@ namespace Web_Browser
             return false;
         }
 
-        private static void addToHistoryFile(string url)
+        public static void addToHistoryFile(string url)
         {
-            System.IO.File.AppendAllText(path, url + Environment.NewLine);
+
+            XmlNode rootNode = xmlDoc.DocumentElement;
+            // System.IO.File.AppendAllText(favouritePath, url + " " + name + Environment.NewLine);
+            XmlNode historyNode = xmlDoc.CreateElement("history");
+
+            historyNode.InnerText = url;
+            rootNode.AppendChild(historyNode);
+            xmlDoc.Save(historyPath);
+
+
 
         }
 
@@ -108,6 +147,11 @@ namespace Web_Browser
             {
                 throw new NoNextPageException("No Next Page to go to.");
             }
+        }
+
+        public static XmlDocument getXMLdoc()
+        {
+            return xmlDoc;
         }
 
 

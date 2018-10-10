@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Web_Browser
 {
@@ -26,14 +27,13 @@ namespace Web_Browser
 
         private void displayFaves()
         {
-            // read lines from fave file
-            string[] faveList = Favourites.getFaves();
+            XmlNodeList favouriteNodes = Favourites.getFaves();
 
-            for(int i= faveList.Length-1; i >=0; i--)
+            for (int i = favouriteNodes.Count - 1; i >= 0; i--)
             {
-                favesDisplay.Items.Add(faveList[i]);
+                favesDisplay.Items.Add(favouriteNodes[i].Attributes["name"].Value + " " + favouriteNodes[i].InnerText);
             }
-  
+
         }
 
         private void backBtn_Click(object sender, EventArgs e)
@@ -44,18 +44,19 @@ namespace Web_Browser
         //Potential for improvement, currently deletes by rewriting over entire favourite file
         private void deleteBtn_Click(object sender, EventArgs e)
         {
-            List<string> readText = Favourites.getFaves().ToList();
+            
+            XmlNodeList favouriteNodes = Favourites.getFaves();
 
             try
             {
-                readText.RemoveAt((readText.Count - 1) - favesDisplay.SelectedIndex);
+                favouriteNodes[0].ParentNode.RemoveChild(favouriteNodes[(favouriteNodes.Count - 1) - favesDisplay.SelectedIndex]);
             }catch(Exception noFaveToDelete)
             {
                 return;
             }
 
-            Favourites.clearFavouritesFile();
-            Favourites.setFavouritesFile(readText);
+            Favourites.saveFavouritesFile();
+            //Favourites.setFavouritesFile(favouriteNodes);
 
             favesDisplay.Items.RemoveAt(favesDisplay.SelectedIndex);
 
@@ -68,34 +69,35 @@ namespace Web_Browser
         private void modifyBtn_Click(object sender, EventArgs e)
         {
 
-            List<string> readText = Favourites.getFaves().ToList();
 
-            //a space character indicates the beginning of the user assigned name and the end of the url (seeing a url can't contain spaces)
-            string[] result=null;
-            try
-            {
-                result = readText[(readText.Count - 1) - favesDisplay.SelectedIndex].Split(' ');
-            }
-            catch (Exception noFaveToModify)
-            {
-                return;
-            }
+            XmlNodeList favouriteNodes = Favourites.getFaves();
 
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter a new name for the address " + result[0], "New name", result[1], -1, -1);
+            //get specific favourite as identicated by selected index
+            XmlNode faveNode = favouriteNodes[(favouriteNodes.Count - 1) - favesDisplay.SelectedIndex];
 
-            if(input.Length < 1) { return; }
 
-            string newLine = result[0] + " " + input;
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Please enter a new name for the address " + faveNode.InnerText, "New name", faveNode.Attributes["name"].Value, -1, -1);
 
-            readText[(readText.Count -1) - favesDisplay.SelectedIndex] = newLine;
+            if (input.Length < 1) { return; }
 
-            Favourites.setFavouritesFile(readText);
 
-            favesDisplay.Items[favesDisplay.SelectedIndex] = newLine;
+            faveNode.Attributes["name"].Value = input;
+
+            Favourites.saveFavouritesFile();
+
+            favesDisplay.Items[favesDisplay.SelectedIndex] = faveNode.Attributes["name"].Value + " " + faveNode.InnerText + " ";
 
             //potentially delegate??? Seemed useless at time as I couldn't imagine ever adding more functionality to this event
             browse.populateFavourites();
 
+        }
+
+        private void deleteAllBtn_Click(object sender, EventArgs e)
+        {
+            Favourites.clearFavouritesFile();
+            Favourites.saveFavouritesFile();
+            browse.populateFavourites();
+            favesDisplay.Items.Clear();
         }
     }
 }

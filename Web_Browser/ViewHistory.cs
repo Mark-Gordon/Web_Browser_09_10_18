@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Web_Browser
 {
@@ -24,11 +25,12 @@ namespace Web_Browser
 
         private void displayHistory()
         {
-            // read lines from fave file
-            string[] historyArray = History.getHistory();
-            for(int i = historyArray.Length-1; i >= 0; i--)
+
+            XmlNodeList historyNodes = History.getHistory();
+
+            for (int i = historyNodes.Count-1; i >= 0; i--)
             {
-                historyDisplay.Items.Add(historyArray[i]);
+                historyDisplay.Items.Add(historyNodes[i].InnerText);
             }
 
         }
@@ -40,28 +42,30 @@ namespace Web_Browser
 
         private void deleteBtn_Click(object sender, EventArgs e)
         {
-            List<string> readText = History.getHistory().ToList();
+            XmlNodeList historyNodes = History.getHistory();
 
             try
             {
-                readText.RemoveAt((readText.Count - 1) - historyDisplay.SelectedIndex);
-            }catch(Exception noHistoryToDelete)
+                historyNodes[0].ParentNode.RemoveChild(historyNodes[(historyNodes.Count - 1) - historyDisplay.SelectedIndex]);
+            }
+            catch (Exception noHistoryToDelete)
             {
                 return;
             }
 
-            History.clearHistory();
-            History.updateHistoryFile(readText);
+            History.saveHistoryFile();
+            //Favourites.setFavouritesFile(favouriteNodes);
 
             historyDisplay.Items.RemoveAt(historyDisplay.SelectedIndex);
 
             //potentially delegate??? Seemed useless at time as I couldn't imagine ever adding more functionality to this event
-            browse.populateHistory();
+            browse.populateFavourites();
         }
 
         private void deleteAllBtn_Click(object sender, EventArgs e)
         {
-            History.clearHistory();
+            History.clearHistoryFile();
+            History.saveHistoryFile();
             browse.populateHistory();
             historyDisplay.Items.Clear();
         }

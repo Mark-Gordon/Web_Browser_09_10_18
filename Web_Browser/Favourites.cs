@@ -4,38 +4,79 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Web_Browser
 {
     static class Favourites
     {
+        static string favouritePath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "favourites.xml";
+        static XmlDocument xmlDoc = new XmlDocument();
 
-        static string favouritePath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "favourites.txt";
-
-
-        public static string[] getFaves()
+        public static XmlNodeList getFaves()
         {
-            string[] faveArray = File.ReadAllLines(favouritePath, Encoding.UTF8);
-            return faveArray;
+
+            XmlNodeList favouriteNodes = xmlDoc.SelectNodes("//favourites/favourite");
+
+
+            return favouriteNodes;
         }
 
 
         public static void addToFavouritesFile(string url, string name)
         {
-            System.IO.File.AppendAllText(favouritePath, url + " " + name + Environment.NewLine);
 
-        }
+            XmlNode rootNode = xmlDoc.DocumentElement;
+           // System.IO.File.AppendAllText(favouritePath, url + " " + name + Environment.NewLine);
+            XmlNode faveNode = xmlDoc.CreateElement("favourite");
+            faveNode.InnerText = url;
+            XmlAttribute attribute = xmlDoc.CreateAttribute("name");
+            attribute.Value = name;
+            faveNode.Attributes.Append(attribute);
+            rootNode.AppendChild(faveNode);
+            xmlDoc.Save(favouritePath);
 
-        public static void setFavouritesFile(List<string> favesList)
-        {
 
-            System.IO.File.WriteAllLines(favouritePath, favesList);
+
         }
 
         public static void clearFavouritesFile()
         {
-            File.Create(favouritePath).Close();
+
+            xmlDoc.DocumentElement.RemoveAll();
+            saveFavouritesFile();
         }
 
+        public static void saveFavouritesFile()
+        {
+            xmlDoc.Save(favouritePath);
+          
+        }
+
+       
+
+        public static void checkExists()
+        {
+            if (!File.Exists(favouritePath))
+            {
+                XmlNode rootNode = xmlDoc.CreateElement("favourites");
+                xmlDoc.AppendChild(rootNode);
+             
+                xmlDoc.Save(favouritePath);
+
+            }
+            else
+            {
+                xmlDoc.Load(favouritePath);
+            }
+              
+        }
+
+        public static XmlDocument getXMLdoc()
+        {
+            return xmlDoc;
+        }
+
+ 
     }
 }
