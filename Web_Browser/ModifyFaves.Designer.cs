@@ -33,21 +33,24 @@
             this.deleteBtn = new System.Windows.Forms.Button();
             this.backBtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.LoadPage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // favesDisplay
             // 
             this.favesDisplay.FormattingEnabled = true;
+            this.favesDisplay.HorizontalScrollbar = true;
             this.favesDisplay.Location = new System.Drawing.Point(91, 22);
             this.favesDisplay.Name = "favesDisplay";
+            this.favesDisplay.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.favesDisplay.Size = new System.Drawing.Size(397, 225);
             this.favesDisplay.TabIndex = 0;
             // 
             // modifyBtn
             // 
-            this.modifyBtn.Location = new System.Drawing.Point(10, 34);
+            this.modifyBtn.Location = new System.Drawing.Point(12, 91);
             this.modifyBtn.Name = "modifyBtn";
-            this.modifyBtn.Size = new System.Drawing.Size(75, 23);
+            this.modifyBtn.Size = new System.Drawing.Size(73, 23);
             this.modifyBtn.TabIndex = 1;
             this.modifyBtn.Text = "Modify Name";
             this.modifyBtn.UseVisualStyleBackColor = true;
@@ -55,9 +58,9 @@
             // 
             // deleteBtn
             // 
-            this.deleteBtn.Location = new System.Drawing.Point(10, 81);
+            this.deleteBtn.Location = new System.Drawing.Point(12, 120);
             this.deleteBtn.Name = "deleteBtn";
-            this.deleteBtn.Size = new System.Drawing.Size(75, 23);
+            this.deleteBtn.Size = new System.Drawing.Size(73, 23);
             this.deleteBtn.TabIndex = 2;
             this.deleteBtn.Text = "Delete";
             this.deleteBtn.UseVisualStyleBackColor = true;
@@ -65,9 +68,9 @@
             // 
             // backBtn
             // 
-            this.backBtn.Location = new System.Drawing.Point(10, 224);
+            this.backBtn.Location = new System.Drawing.Point(12, 250);
             this.backBtn.Name = "backBtn";
-            this.backBtn.Size = new System.Drawing.Size(75, 23);
+            this.backBtn.Size = new System.Drawing.Size(73, 23);
             this.backBtn.TabIndex = 3;
             this.backBtn.Text = "Back";
             this.backBtn.UseVisualStyleBackColor = true;
@@ -75,26 +78,37 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 122);
+            this.button1.Location = new System.Drawing.Point(12, 149);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(73, 23);
             this.button1.TabIndex = 4;
             this.button1.Text = "Delete All";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.deleteAllBtn_Click);
+            // 
+            // LoadPage
+            // 
+            this.LoadPage.Location = new System.Drawing.Point(12, 22);
+            this.LoadPage.Name = "LoadPage";
+            this.LoadPage.Size = new System.Drawing.Size(73, 23);
+            this.LoadPage.TabIndex = 5;
+            this.LoadPage.Text = "Load Page";
+            this.LoadPage.UseVisualStyleBackColor = true;
+            this.LoadPage.Click += new System.EventHandler(this.loadPage_Click);
             // 
             // ModifyFaves
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(500, 285);
+            this.Controls.Add(this.LoadPage);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.backBtn);
             this.Controls.Add(this.deleteBtn);
             this.Controls.Add(this.modifyBtn);
             this.Controls.Add(this.favesDisplay);
             this.Name = "ModifyFaves";
-            this.Text = "ModifyFaves";
+            this.Text = "Modify Favourites";
             this.ResumeLayout(false);
 
         }
@@ -106,5 +120,6 @@
         private System.Windows.Forms.Button backBtn;
         private System.Windows.Forms.Button modifyBtn;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button LoadPage;
     }
 }

@@ -43,7 +43,7 @@
             // 
             this.backBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backBtn.Enabled = false;
-            this.backBtn.Location = new System.Drawing.Point(97, 17);
+            this.backBtn.Location = new System.Drawing.Point(96, 17);
             this.backBtn.Name = "backBtn";
             this.backBtn.Size = new System.Drawing.Size(75, 23);
             this.backBtn.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             // addressTextBox
             // 
-            this.addressTextBox.Location = new System.Drawing.Point(284, 17);
+            this.addressTextBox.Location = new System.Drawing.Point(283, 20);
             this.addressTextBox.Name = "addressTextBox";
             this.addressTextBox.Size = new System.Drawing.Size(423, 20);
             this.addressTextBox.TabIndex = 2;
@@ -78,7 +78,7 @@
             // forwardBtn
             // 
             this.forwardBtn.Enabled = false;
-            this.forwardBtn.Location = new System.Drawing.Point(191, 17);
+            this.forwardBtn.Location = new System.Drawing.Point(188, 17);
             this.forwardBtn.Name = "forwardBtn";
             this.forwardBtn.Size = new System.Drawing.Size(75, 23);
             this.forwardBtn.TabIndex = 5;
@@ -88,7 +88,7 @@
             // 
             // faveBtn
             // 
-            this.faveBtn.Location = new System.Drawing.Point(746, 14);
+            this.faveBtn.Location = new System.Drawing.Point(746, 17);
             this.faveBtn.Name = "faveBtn";
             this.faveBtn.Size = new System.Drawing.Size(75, 23);
             this.faveBtn.TabIndex = 6;
@@ -111,7 +111,7 @@
             // 
             this.goHomeBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("goHomeBtn.BackgroundImage")));
             this.goHomeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.goHomeBtn.Location = new System.Drawing.Point(12, 17);
+            this.goHomeBtn.Location = new System.Drawing.Point(12, 18);
             this.goHomeBtn.Name = "goHomeBtn";
             this.goHomeBtn.Size = new System.Drawing.Size(33, 23);
             this.goHomeBtn.TabIndex = 8;

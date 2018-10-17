@@ -27,7 +27,7 @@ namespace Web_Browser
         {
 
             XmlNode rootNode = xmlDoc.DocumentElement;
-           // System.IO.File.AppendAllText(favouritePath, url + " " + name + Environment.NewLine);
+
             XmlNode faveNode = xmlDoc.CreateElement("favourite");
             faveNode.InnerText = url;
             XmlAttribute attribute = xmlDoc.CreateAttribute("name");

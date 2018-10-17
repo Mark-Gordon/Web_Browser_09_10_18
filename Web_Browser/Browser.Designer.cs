@@ -70,42 +70,42 @@
             // newTabToolStripMenuItem
             // 
             this.newTabToolStripMenuItem.Name = "newTabToolStripMenuItem";
-            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.newTabToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newTabToolStripMenuItem.Text = "New tab";
             this.newTabToolStripMenuItem.Click += new System.EventHandler(this.newTabMenu_Click);
             // 
             // clearHistoryToolStripMenuItem
             // 
             this.clearHistoryToolStripMenuItem.Name = "clearHistoryToolStripMenuItem";
-            this.clearHistoryToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.clearHistoryToolStripMenuItem.Text = "Remove Tab";
+            this.clearHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearHistoryToolStripMenuItem.Text = "Close Tab";
             this.clearHistoryToolStripMenuItem.Click += new System.EventHandler(this.removeTabMenu_Click);
             // 
             // clearFavouritesMenu
             // 
             this.clearFavouritesMenu.Name = "clearFavouritesMenu";
-            this.clearFavouritesMenu.Size = new System.Drawing.Size(158, 22);
+            this.clearFavouritesMenu.Size = new System.Drawing.Size(180, 22);
             this.clearFavouritesMenu.Text = "Clear Favourites";
             this.clearFavouritesMenu.Click += new System.EventHandler(this.clearFavouritesMenu_Click);
             // 
             // clearHistoryMenu
             // 
             this.clearHistoryMenu.Name = "clearHistoryMenu";
-            this.clearHistoryMenu.Size = new System.Drawing.Size(158, 22);
+            this.clearHistoryMenu.Size = new System.Drawing.Size(180, 22);
             this.clearHistoryMenu.Text = "Clear History";
             this.clearHistoryMenu.Click += new System.EventHandler(this.clearHistoryMenu_Click);
             // 
             // editFaveMenu
             // 
             this.editFaveMenu.Name = "editFaveMenu";
-            this.editFaveMenu.Size = new System.Drawing.Size(158, 22);
-            this.editFaveMenu.Text = "Edit Favourites";
+            this.editFaveMenu.Size = new System.Drawing.Size(180, 22);
+            this.editFaveMenu.Text = "All Favourites";
             this.editFaveMenu.Click += new System.EventHandler(this.editFaveMenu_Click);
             // 
             // allHistoryToolStripMenuItem
             // 
             this.allHistoryToolStripMenuItem.Name = "allHistoryToolStripMenuItem";
-            this.allHistoryToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.allHistoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.allHistoryToolStripMenuItem.Text = "All History";
             this.allHistoryToolStripMenuItem.Click += new System.EventHandler(this.allHistoryToolStripMenuItem_Click);
             // 

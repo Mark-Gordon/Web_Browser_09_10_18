@@ -12,25 +12,34 @@ namespace Web_Browser
         public Browser()
         {
             InitializeComponent();
+            Homepage.checkExists();
             populateHistory();
             populateFavourites();
             initNewTab(null);
         }
 
-        public void changeTabName(string name)
+        public void changeTabName(string name, TabPage tab)
         {
             if (name.Length > 10)
                 name = name.Substring(0, 10) + "...";
 
-            tabControl.SelectedTab.Text = name;
+            tab.Text = name;
 
         }
 
+        public void changeTab(int index)
+        {
+            tabControl.SelectedIndex = index;
+
+        }
+
+
+
         //create a new tab which loads the homepage if url == null
-        private void initNewTab(string url)
+        public void initNewTab(string url)
         {
             TabPage tab = new TabPage();
-            Web page = new Web(this);
+            Web page = new Web(this, tab);
 
             //subscribes to Event in Web Class - allows for the method(s) the Web class calls - on Event - from this class to change
             //without having to recompile the Web class
@@ -153,6 +162,11 @@ namespace Web_Browser
             ViewHistory histView = new ViewHistory(this);
 
             histView.Show();
+        }
+
+        public int getTabCount()
+        {
+            return tabControl.TabCount;
         }
 
     }

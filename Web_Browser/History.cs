@@ -10,7 +10,6 @@ namespace Web_Browser
 {
     static class History{
 
-        static string path = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "\\history.txt";
         static string historyPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "\\history.xml";
         static XmlDocument xmlDoc = new XmlDocument();
 
@@ -103,10 +102,7 @@ namespace Web_Browser
 
         }
 
-        public static void updateHistoryFile(List<string> historyList)
-        {
-            System.IO.File.WriteAllLines(path, historyList);
-        }
+
 
         //checks if there is a previous node to go from the current one
         public static bool canGoToPrevious()

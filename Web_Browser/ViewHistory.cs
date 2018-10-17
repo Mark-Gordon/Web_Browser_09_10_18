@@ -69,5 +69,21 @@ namespace Web_Browser
             browse.populateHistory();
             historyDisplay.Items.Clear();
         }
+
+        private void LoadPage_Click(object sender, EventArgs e)
+        {
+            XmlNodeList historyNodes = History.getHistory();
+
+            try
+            {
+                browse.initNewTab(historyNodes[(historyNodes.Count - 1) - historyDisplay.SelectedIndex].InnerText);
+                browse.changeTab(browse.getTabCount()-1);
+                Close();
+            }
+            catch (Exception noHistoryToLoad)
+            {
+                return;
+            }
+        }
     }
 }

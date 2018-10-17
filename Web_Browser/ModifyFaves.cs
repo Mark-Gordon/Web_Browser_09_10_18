@@ -25,13 +25,31 @@ namespace Web_Browser
         }
 
 
+
         private void displayFaves()
         {
             XmlNodeList favouriteNodes = Favourites.getFaves();
 
             for (int i = favouriteNodes.Count - 1; i >= 0; i--)
             {
-                favesDisplay.Items.Add(favouriteNodes[i].Attributes["name"].Value + " " + favouriteNodes[i].InnerText);
+                favesDisplay.Items.Add(favouriteNodes[i].Attributes["name"].Value + "\t\t\t" + favouriteNodes[i].InnerText);
+            }
+
+        }
+
+        private void loadPage_Click(object sender, EventArgs e)
+        {
+            XmlNodeList favouriteNodes = Favourites.getFaves();
+
+            try
+            {
+                browse.initNewTab(favouriteNodes[(favouriteNodes.Count - 1) - favesDisplay.SelectedIndex].InnerText);
+                browse.changeTab(browse.getTabCount() - 1);
+                Close();
+            }
+            catch (Exception noFaveToLoad)
+            {
+                return;
             }
 
         }

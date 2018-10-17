@@ -19,12 +19,14 @@ namespace Web_Browser
         private string workerURL = null;
 
         private Browser browse = null;
+        private TabPage tab = null;
 
 
-        public Web(Browser browse)
+        public Web(Browser browse, TabPage tab)
         {
             InitializeComponent();
             this.browse = browse;
+            this.tab = tab;
             
         }
 
@@ -53,7 +55,7 @@ namespace Web_Browser
             }
             else
             {
-                browse.changeTabName(url);
+                browse.changeTabName(url, tab);
                 addressTextBox.Text = url;
                 //start process on worker thread
                 backgroundWorker1.RunWorkerAsync(url);
@@ -130,6 +132,7 @@ namespace Web_Browser
             string prompt = "Please enter the name you would like to assign to the web address " + addressTextBox.Text;
             string faveName = Microsoft.VisualBasic.Interaction.InputBox(prompt, "Favourite", "Enter Name", -1, -1);
 
+            if(faveName.Length < 1) { return; };
 
             Favourites.addToFavouritesFile(addressTextBox.Text, faveName);
 
