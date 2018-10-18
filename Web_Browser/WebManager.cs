@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Web_Browser
 {
@@ -36,7 +35,7 @@ namespace Web_Browser
                     Stream receiveStream = response.GetResponseStream();
                     StreamReader readStream = null;
 
-                    //checks if response is character encoded and reads stream
+                    //checks if response is character encoded and reads stream appropriately
                     if (response.CharacterSet == null)
                     {
                         readStream = new StreamReader(receiveStream);
@@ -58,27 +57,28 @@ namespace Web_Browser
                 var response = e.Response as HttpWebResponse;
 
                 if (response != null) { 
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.BadRequest:
-                        return "400 Bad Request";
-                    case HttpStatusCode.Forbidden:
-                        return "403 Forbidden";
-                    case HttpStatusCode.NotFound:
-                        return "404 Not Found";
-                }
-
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.BadRequest:
+                            return "400 Bad Request";
+                        case HttpStatusCode.Forbidden:
+                            return "403 Forbidden";
+                        case HttpStatusCode.NotFound:
+                            return "404 Not Found";
+                    }
                 }
             }
             catch (UriFormatException e)
             {
                 return e.Message;
             }
+            //thrown when there is an attempt to read, seek, or write to a stream that does not support
+            //the invoked functionality.
             catch (NotSupportedException e)
             {
                 return e.Message;
             }
-            return "An error has occured.";
+            return "An unidentified error has occured.";
         }
     }
 }

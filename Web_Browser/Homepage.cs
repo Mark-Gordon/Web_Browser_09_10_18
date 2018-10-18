@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Web_Browser
@@ -24,19 +21,18 @@ namespace Web_Browser
             homeNode.InnerText = url;
 
             rootNode.AppendChild(homeNode);
-            xmlDoc.Save(homePath);
-
+            saveHomepageFile();
         }
 
         public static string getHomepageURL()
         {
-
             try
             {
                 return xmlDoc.ChildNodes[0].InnerText;
             }
-            catch(Exception noFavouriteSetDefault)
+            catch(XmlException noHomepageSetDefault)
             {
+                Console.WriteLine(noHomepageSetDefault.Message + "\nSetting default homepage of google");
                 setNewHomepage("https://www.google.co.uk/");
             }
          
@@ -45,15 +41,20 @@ namespace Web_Browser
 
         public static void clearHomepageFile()
         {
-
             xmlDoc.DocumentElement.RemoveAll();
             saveHomepageFile();
         }
 
         public static void saveHomepageFile()
         {
-            xmlDoc.Save(homePath);
-
+            try
+            {
+                xmlDoc.Save(homePath);
+            }
+            catch (XmlException unableToSave)
+            {
+                Console.WriteLine(unableToSave.Message);
+            }
         }
 
         public static XmlDocument getXMLdoc()
@@ -63,20 +64,25 @@ namespace Web_Browser
 
         public static void checkExists()
         {
+            //creates file if does not exist
             if (!File.Exists(homePath))
             {
                 XmlNode rootNode = xmlDoc.CreateElement("homepage");
                 xmlDoc.AppendChild(rootNode);
 
-
                 setNewHomepage("www.google.com");
-
             }
             else
             {
-                xmlDoc.Load(homePath);
+                try
+                {
+                    xmlDoc.Load(homePath);
+                }
+                catch (XmlException unableToLoad)
+                {
+                    Console.WriteLine(unableToLoad.Message);
+                }
             }
-
         }
     }
 }

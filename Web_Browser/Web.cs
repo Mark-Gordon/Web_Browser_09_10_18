@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
+
 
 namespace Web_Browser
 {
@@ -39,6 +33,15 @@ namespace Web_Browser
         public delegate void LoadHTMLEventhandler(object source, EventArgs args);
         public event LoadHTMLEventhandler LoadHTML;
 
+        //called when backgroundworker is completed and will call methods subscribed to LoadHTMLEventhandler delegate
+        protected virtual void OnLoadHTML()
+        {
+            if (LoadHTML != null)
+            {
+                LoadHTML(this, EventArgs.Empty);
+            }
+        }
+
         //loads new page given an url
         public void loadHTML(string url)
         {
@@ -59,19 +62,11 @@ namespace Web_Browser
                 addressTextBox.Text = url;
                 //start process on worker thread
                 backgroundWorker1.RunWorkerAsync(url);
-
             }
         }
 
-        //called when backgroundworker is completed and will call relevant methods from other classes such as updating history
-        protected virtual void OnLoadHTML()
-        {
-            if (LoadHTML != null)
-            {
-                LoadHTML(this, EventArgs.Empty);
-            }
-        }
 
+        //changes clickable status of buttons based off if there is 'Next' or 'Previous' history
         private void toggleButtons()
         {
             forwardBtn.Enabled = History.canGoToNext();
@@ -80,10 +75,9 @@ namespace Web_Browser
         }
 
         private void address_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+        {   //ensures users can't make empty searches
+            if (e.KeyCode == Keys.Enter && (addressTextBox.Text.Length > 0))
                 loadHTML(addressTextBox.Text);
-
         }
 
 
@@ -127,18 +121,7 @@ namespace Web_Browser
         public delegate void FaveEventhandler(object source, EventArgs args);
         public event FaveEventhandler FaveEvent;
 
-        private void faveBtn_Click(object sender, EventArgs e)
-        {
-            string prompt = "Please enter the name you would like to assign to the web address " + addressTextBox.Text;
-            string faveName = Microsoft.VisualBasic.Interaction.InputBox(prompt, "Favourite", "Enter Name", -1, -1);
-
-            if(faveName.Length < 1) { return; };
-
-            Favourites.addToFavouritesFile(addressTextBox.Text, faveName);
-
-            OnFave();
-        }
-
+        //called when backgroundworker is completed and will call methods subscribed to FaveEventhandler delegate
         protected virtual void OnFave()
         {
             if (FaveEvent != null)
@@ -146,6 +129,22 @@ namespace Web_Browser
                 FaveEvent(this, EventArgs.Empty);
             }
         }
+
+        private void faveBtn_Click(object sender, EventArgs e)
+        {
+            string prompt = "Please enter the name you would like to assign to the web address " + addressTextBox.Text;
+
+            string faveName = Microsoft.VisualBasic.Interaction.InputBox(prompt, "Favourite", "Enter Name", -1, -1);
+
+            if(faveName.Length < 1) { return; };
+
+
+
+            Favourites.addToFavouritesFile(addressTextBox.Text, faveName);
+
+            OnFave();
+        }
+
 
         private void homeBtn_Click(object sender, EventArgs e)
         {

@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -24,19 +16,19 @@ namespace Web_Browser
 
         }
 
-
-
+        //populates listbox with favourites from file
         private void displayFaves()
         {
             XmlNodeList favouriteNodes = Favourites.getFaves();
 
             for (int i = favouriteNodes.Count - 1; i >= 0; i--)
-            {
+            {   //poor use of '\t\t\t', requires proper formatting
                 favesDisplay.Items.Add(favouriteNodes[i].Attributes["name"].Value + "\t\t\t" + favouriteNodes[i].InnerText);
             }
 
         }
 
+        //Will load the page of the selected URL from list in a new tab, closing this View
         private void loadPage_Click(object sender, EventArgs e)
         {
             XmlNodeList favouriteNodes = Favourites.getFaves();
@@ -49,6 +41,7 @@ namespace Web_Browser
             }
             catch (Exception noFaveToLoad)
             {
+                MessageBox.Show("Please select a favourite from the list to load.");
                 return;
             }
 
@@ -58,15 +51,14 @@ namespace Web_Browser
         {
             Close();
         }
-
-        //Potential for improvement, currently deletes by rewriting over entire favourite file
+        
+        //selected favourite from listbox will be deleted from file
         private void deleteBtn_Click(object sender, EventArgs e)
         {
-            
             XmlNodeList favouriteNodes = Favourites.getFaves();
 
             try
-            {
+            {   //get specific favourite as identicated by selected index
                 favouriteNodes[0].ParentNode.RemoveChild(favouriteNodes[(favouriteNodes.Count - 1) - favesDisplay.SelectedIndex]);
             }catch(Exception noFaveToDelete)
             {
@@ -74,11 +66,10 @@ namespace Web_Browser
             }
 
             Favourites.saveFavouritesFile();
-            //Favourites.setFavouritesFile(favouriteNodes);
 
             favesDisplay.Items.RemoveAt(favesDisplay.SelectedIndex);
 
-            //potentially delegate??? Seemed useless at time as I couldn't imagine ever adding more functionality to this event
+            //potentially delegate??? Seemed pointless at time as I couldn't imagine ever adding more functionality to this event
             browse.populateFavourites();
 
         }

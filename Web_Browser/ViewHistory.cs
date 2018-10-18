@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -23,9 +15,9 @@ namespace Web_Browser
             displayHistory();
         }
 
+        //populates listbox with history from file
         private void displayHistory()
         {
-
             XmlNodeList historyNodes = History.getHistory();
 
             for (int i = historyNodes.Count-1; i >= 0; i--)
@@ -40,12 +32,13 @@ namespace Web_Browser
             Close();
         }
 
+        //selected favourite from listbox will be deleted from file
         private void deleteBtn_Click(object sender, EventArgs e)
         {
             XmlNodeList historyNodes = History.getHistory();
 
             try
-            {
+            {   //get specific history url as identicated by selected index
                 historyNodes[0].ParentNode.RemoveChild(historyNodes[(historyNodes.Count - 1) - historyDisplay.SelectedIndex]);
             }
             catch (Exception noHistoryToDelete)
@@ -54,12 +47,11 @@ namespace Web_Browser
             }
 
             History.saveHistoryFile();
-            //Favourites.setFavouritesFile(favouriteNodes);
 
             historyDisplay.Items.RemoveAt(historyDisplay.SelectedIndex);
 
             //potentially delegate??? Seemed useless at time as I couldn't imagine ever adding more functionality to this event
-            browse.populateFavourites();
+            browse.populateHistory();
         }
 
         private void deleteAllBtn_Click(object sender, EventArgs e)
@@ -70,6 +62,7 @@ namespace Web_Browser
             historyDisplay.Items.Clear();
         }
 
+        //Will load the page of the selected URL from list in a new tab, closing this View
         private void LoadPage_Click(object sender, EventArgs e)
         {
             XmlNodeList historyNodes = History.getHistory();
@@ -82,6 +75,7 @@ namespace Web_Browser
             }
             catch (Exception noHistoryToLoad)
             {
+                MessageBox.Show("Please select one of the histories from the list to load.");
                 return;
             }
         }

@@ -38,6 +38,7 @@
             // historyDisplay
             // 
             this.historyDisplay.FormattingEnabled = true;
+            this.historyDisplay.HorizontalScrollbar = true;
             this.historyDisplay.Location = new System.Drawing.Point(91, 22);
             this.historyDisplay.Name = "historyDisplay";
             this.historyDisplay.Size = new System.Drawing.Size(397, 225);

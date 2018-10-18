@@ -7,8 +7,6 @@ namespace Web_Browser
     public partial class Browser : Form
     {
 
-
-
         public Browser()
         {
             InitializeComponent();
@@ -76,14 +74,16 @@ namespace Web_Browser
 
         public void populateFavourites()
         {
+            //ensures favourites file exists
             Favourites.checkExists();
+
             favesMenu.DropDownItems.Clear();
 
+            //get favourites from file
             XmlNodeList favouriteNodes = Favourites.getFaves();
    
 
             int index = 0;
-            //loops from last index as we want to display the last entered favourite first
             for (int i= favouriteNodes.Count-1; i >= 0; i--)
             {
                 string url = favouriteNodes[i].InnerText;
@@ -105,11 +105,11 @@ namespace Web_Browser
 
         public void populateHistory()
         {
-
+            //ensures history file exists
             History.checkExists();
 
             historyMenu.DropDownItems.Clear();
-            // Open the file to read from.
+            //get history from file
             XmlNodeList historyNodes = History.getHistory();
 
 

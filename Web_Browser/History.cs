@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Web_Browser
@@ -16,36 +13,47 @@ namespace Web_Browser
         private static LinkedList<string> history = new LinkedList<string>();
         public static LinkedListNode<string> current = new LinkedListNode<string>(null);
 
-
+   
         public static void checkExists()
-        {
+        {            
+            //creates file if does not exist
             if (!File.Exists(historyPath))
             {
                 XmlNode rootNode = xmlDoc.CreateElement("historys");
                 xmlDoc.AppendChild(rootNode);
 
-                xmlDoc.Save(historyPath);
-
+                saveHistoryFile();
             }
             else
             {
-                xmlDoc.Load(historyPath);
+                try
+                {
+                    xmlDoc.Load(historyPath);
+                }
+                catch (XmlException unableToLoad)
+                {
+                    Console.WriteLine(unableToLoad.Message);
+                }
             }
 
         }
 
         public static void saveHistoryFile()
         {
-            xmlDoc.Save(historyPath);
+            try
+            {
+                xmlDoc.Save(historyPath);
+            }catch(XmlException unableToSave)
+            {
+                Console.WriteLine(unableToSave.Message);
+            }
 
         }
 
 
         public static XmlNodeList getHistory()
         {
-
             XmlNodeList favouriteNodes = xmlDoc.SelectNodes("//historys/history");
-
 
             return favouriteNodes;
         }
@@ -63,6 +71,9 @@ namespace Web_Browser
 
             addToHistoryFile(url);
 
+            //First coniditon check:
+            // 1) Because you can’t call the ‘AddAfter’ method if there isn’t already a value in the linked list
+            //2) If the current value is equal to the URL there is no need to add it again
             if (current.Value != null && !(current.Value.Equals(url)))
             {
                 history.AddAfter(current, url);
@@ -91,12 +102,11 @@ namespace Web_Browser
         {
 
             XmlNode rootNode = xmlDoc.DocumentElement;
-            // System.IO.File.AppendAllText(favouritePath, url + " " + name + Environment.NewLine);
             XmlNode historyNode = xmlDoc.CreateElement("history");
 
             historyNode.InnerText = url;
             rootNode.AppendChild(historyNode);
-            xmlDoc.Save(historyPath);
+            saveHistoryFile();
 
 
 
@@ -104,13 +114,11 @@ namespace Web_Browser
 
 
 
-        //checks if there is a previous node to go from the current one
         public static bool canGoToPrevious()
         {
             return (current.Previous != null);
         }
 
-        //checks if there is a next node to go from the current one
         public static bool canGoToNext()
         {
             return (current.Next != null);
@@ -126,12 +134,12 @@ namespace Web_Browser
             }
             else
             {
-                throw new NoPreviousPageException("No previous Page to go to.");
+                throw new NoPreviousPageException("No previous page to go to.");
             }
         }
 
 
-        //sets the current node to the previous one and return the url associated with it
+        //sets the current node to the next one and return the url associated with it
         public static string goToNext()
         {
             if (canGoToNext())
@@ -141,7 +149,7 @@ namespace Web_Browser
             }
             else
             {
-                throw new NoNextPageException("No Next Page to go to.");
+                throw new NoNextPageException("No next page to go to.");
             }
         }
 

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Web_Browser
@@ -15,9 +11,7 @@ namespace Web_Browser
 
         public static XmlNodeList getFaves()
         {
-
             XmlNodeList favouriteNodes = xmlDoc.SelectNodes("//favourites/favourite");
-
 
             return favouriteNodes;
         }
@@ -25,7 +19,6 @@ namespace Web_Browser
 
         public static void addToFavouritesFile(string url, string name)
         {
-
             XmlNode rootNode = xmlDoc.DocumentElement;
 
             XmlNode faveNode = xmlDoc.CreateElement("favourite");
@@ -34,22 +27,23 @@ namespace Web_Browser
             attribute.Value = name;
             faveNode.Attributes.Append(attribute);
             rootNode.AppendChild(faveNode);
-            xmlDoc.Save(favouritePath);
-
-
-
+            saveFavouritesFile();
         }
 
         public static void clearFavouritesFile()
         {
-
             xmlDoc.DocumentElement.RemoveAll();
             saveFavouritesFile();
         }
 
         public static void saveFavouritesFile()
         {
-            xmlDoc.Save(favouritePath);
+            try
+            {
+                xmlDoc.Save(favouritePath);
+            } catch (XmlException unableToSave) {
+                Console.WriteLine(unableToSave.Message);
+            }
           
         }
 
@@ -57,17 +51,23 @@ namespace Web_Browser
 
         public static void checkExists()
         {
+            //creates file if does not exist
             if (!File.Exists(favouritePath))
             {
                 XmlNode rootNode = xmlDoc.CreateElement("favourites");
                 xmlDoc.AppendChild(rootNode);
-             
-                xmlDoc.Save(favouritePath);
 
+                saveFavouritesFile();
             }
             else
             {
-                xmlDoc.Load(favouritePath);
+                try
+                {
+                    xmlDoc.Load(favouritePath);
+                }catch(XmlException unableToLoad)
+                {
+                    Console.WriteLine(unableToLoad.Message);
+                }
             }
               
         }
